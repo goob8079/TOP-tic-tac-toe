@@ -153,7 +153,6 @@ const Gameboard = (function() {
 console.log(Gameboard.displayBoard());
 Gameboard.addPlayer("bob", "x");
 Gameboard.addPlayer("joe", "o");
-console.log(Gameboard.showPlayers());
 console.log(Gameboard.placeShape("X", 0, 0));
 console.log(Gameboard.placeShape("O", 0, 1));
 console.log(Gameboard.placeShape("X", 0, 2));
