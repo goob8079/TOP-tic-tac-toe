@@ -99,19 +99,43 @@ const Gameboard = (function() {
         return null;
     }
 
+    function checkDiagonal() {
+        let downRight = gameboardArr.map((a, i) => a[i]);
+        // the ... makes it so the gameboardArr won't be changed with reverse()
+        let leftUp = [...gameboardArr].reverse().map((a, i) => a[i]);
+
+        const downRightFirstVal = downRight[0];
+        const leftUpFirstVal = leftUp[0];
+
+        if (downRightFirstVal !== null && downRight.every(val => val === downRightFirstVal)) {
+            return downRightFirstVal;
+        } 
+        
+        if (leftUpFirstVal !== null && leftUp.every(val => val === leftUpFirstVal)) {
+            return leftUpFirstVal;
+        }
+        
+        return null;
+    }
+
     function displayWinner() {
-        if (checkRows() === playerArr[0].shape) {
+        const rowWinner = checkRows();
+        const colWinner = checkCols();
+        const diagWinner = checkDiagonal();
+
+        const winner = rowWinner || colWinner || diagWinner;
+        
+        if (winner === playerArr[0].shape) {
             return `${playerArr[0].playerName} wins!`;
-        } else if (checkRows() === playerArr[1].shape) {
+        } else if (winner === playerArr[1].shape) {
             return `${playerArr[1].playerName} wins!`;
         }
 
-        if (checkCols() === playerArr[0].shape) {
-            return `${playerArr[0].playerName} wins!`;
-        } else if (checkCols() === playerArr[1].shape) {
-            return `${playerArr[1].playerName} wins!`;
+        // turn the gameboardArr (2D array) into a 1D array with flat()
+        const fullBoard = gameboardArr.flat().every(cell => cell !== null);
+        if (fullBoard) {
+            return `It's a draw!`;
         }
-        
     }
 
     function displayBoard() {
@@ -133,9 +157,9 @@ console.log(Gameboard.showPlayers());
 console.log(Gameboard.placeShape("X", 0, 0));
 console.log(Gameboard.placeShape("O", 0, 1));
 console.log(Gameboard.placeShape("X", 0, 2));
-console.log(Gameboard.placeShape("X", 1, 0));
-// console.log(Gameboard.placeShape("O", 1, 1));
-// console.log(Gameboard.placeShape("O", 1, 2));
+console.log(Gameboard.placeShape("O", 1, 0));
+console.log(Gameboard.placeShape("O", 1, 1));
+console.log(Gameboard.placeShape("O", 1, 2));
 console.log(Gameboard.placeShape("X", 2, 0));
 console.log(Gameboard.placeShape("O", 2, 1));
 console.log(Gameboard.placeShape("X", 2, 2));
