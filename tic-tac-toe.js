@@ -82,20 +82,7 @@ function createGameboard() {
     
     function addPlayer(name, shape) {
         const shapeU = shape.toUpperCase();
-        //  shape check
-        if (shapeU !== "O" && shapeU !== "X") {
-            console.log(`${name}'s shape must be X or O`);
-            return;
-        } else {
-            playerArr.push(Player(name, shape));
-        }
-
-        // check player amount
-        if (playerArr.length > 2) {
-            console.log("Too many players! Only 2 players allowed.");
-            playerArr.pop();
-        }
-
+        playerArr.push(Player(name, shape));
         return Player(name, shape);
     }
 
@@ -106,31 +93,10 @@ function createGameboard() {
     function getPlayer2() {
         return playerArr[1];
     }
-
-    // function showPlayers() {
-    //     return playerArr.map(player => `${player.playerName}: ${player.shape}`);
-    // }
-
+    
     function placeShape(shape, row, col) {
         const shapeU = shape.toUpperCase();
-        // shape check
-        if (shapeU !== "X" && shapeU !== "O") {
-            console.log("Invalid value, use X or O.");
-        }
-
-        // bounds check
-        if (row < 0 || row > 2 || 
-            col < 0 || col > 2) {
-            console.log("Out of bounds! Place shape in bounds.");
-        }
-
-        // cell check
-        if (gameboardArr[row][col] !== null) {
-            console.log("This space is already taken!");
-        }
-
         gameboardArr[row][col] = shapeU;
-        return displayBoard();        
     }
 
     function displayWinner() {
@@ -206,15 +172,6 @@ function createGameboard() {
         }
     }
 
-    function displayBoard() {
-        // .map() loops through each row of the board, 
-        // then row.map() loops through each cell (index), and checks if the cell is null or undefined.
-        // If it is either, it is replaced by a space (" ") and returned, otherwise any value already in it is returned.
-        return gameboardArr
-            .map(row => row.map(cell => cell ?? " ").join(" | "))
-            .join("\n");
-    }
-
     function resetGame() {
         playerArr = [];
 
@@ -225,5 +182,5 @@ function createGameboard() {
         ];
     }
 
-    return { addPlayer, getPlayer1, getPlayer2, placeShape, displayWinner, displayBoard, resetGame };
+    return { addPlayer, getPlayer1, getPlayer2, placeShape, displayWinner, resetGame };
 }
