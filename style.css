@@ -45,8 +45,13 @@ body {
     }
 }
 
-.cell.one, .cell.two, .cell.three {
+.cell {
     border: 1px solid black;
     height: 100%;
     width: 100%;
+    font-family: 'Varela Round';
+    font-size: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

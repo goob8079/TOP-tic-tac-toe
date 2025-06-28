@@ -1,23 +1,67 @@
 const Gameboard = createGameboard();
 
-const player1 = document.querySelector("#player1");
-const player2 = document.querySelector("#player2");
-const startBtn = document.querySelector("#start");
-const resetBtn = document.querySelector("#reset");
+const player1Input = document.querySelector("#player1");
+const player2Input = document.querySelector("#player2");
 let msg = document.querySelector(".msg");
 
-startBtn.addEventListener("click", () => {
-    Gameboard.addPlayer(player1.value, "X");
-    Gameboard.addPlayer(player2.value, "O");
-});
-
-const cell1 = document.querySelector(".one");
+const cell1 = document.querySelector(".one")
 const cell2 = document.querySelector(".two");
 const cell3 = document.querySelector(".three");
-document.querySelector(".top-row").addEventListener("click", (e) => {
-    if (e.target === cell1) {
-        cell1.textContent = Gameboard.getPlayer1.shape;
-    }
+const cells = document.querySelectorAll(".cell"); // turn into a NodeList
+
+let currentPlayer;
+let gameFin = false;
+
+// start button 
+document.querySelector("#start").addEventListener("click", () => {
+    if (player1Input.value === "") player1Input.value = "player1";
+    if (player2Input.value === "") player2Input.value = "player2";
+
+    Gameboard.addPlayer(player1Input.value, "X");
+    Gameboard.addPlayer(player2Input.value, "O");
+    
+    const player1 = Gameboard.getPlayer1();
+    const player2 = Gameboard.getPlayer2();
+    
+    gameFin = false;
+    currentPlayer = player1;
+    msg.textContent = `${currentPlayer.playerName}'s turn`;
+});
+
+cells.forEach((cell, index) => {
+    cell.addEventListener("click", () => {
+        if (gameFin || cell.textContent !== "") return;
+        
+        const row = Math.floor(index / 3);
+        const col = index % 3;
+        
+        cell.textContent = currentPlayer.shape;
+        Gameboard.placeShape(currentPlayer.shape, row, col);
+        
+        const result = Gameboard.displayWinner();
+        if (result) {
+            msg.textContent = result;
+            gameFin = true;
+            return;
+        }
+
+        const player1 = Gameboard.getPlayer1();
+        const player2 = Gameboard.getPlayer2();
+        
+        currentPlayer = (currentPlayer === player1 ? player2 : player1);
+        msg.textContent = `${currentPlayer.playerName}'s turn`;
+    });  
+}); 
+
+// reset button
+document.querySelector("#reset").addEventListener("click", () => {
+    Gameboard.resetGame()
+    player1Input.value = "";
+    player2Input.value = "";
+    gameFin = false;
+    currentPlayer = Gameboard.getPlayer1();
+
+    cells.forEach(cell => cell.textContent = "");
 });
 
 // converted to function to be accessible from anywhere
@@ -171,19 +215,15 @@ function createGameboard() {
             .join("\n");
     }
 
-    return { addPlayer, getPlayer1, getPlayer2, placeShape, displayWinner, displayBoard, };
-}
+    function resetGame() {
+        playerArr = [];
 
-// console.log(Gameboard.displayBoard());
-// Gameboard.addPlayer("bob", "x");
-// Gameboard.addPlayer("joe", "o");
-// console.log(Gameboard.placeShape("O", 0, 0));
-// console.log(Gameboard.placeShape("O", 0, 1));
-// console.log(Gameboard.placeShape("X", 0, 2));
-// console.log(Gameboard.placeShape("O", 1, 0));
-// console.log(Gameboard.placeShape("X", 1, 1));
-// console.log(Gameboard.placeShape("O", 1, 2));
-// console.log(Gameboard.placeShape("X", 2, 0));
-// console.log(Gameboard.placeShape("O", 2, 1));
-// console.log(Gameboard.placeShape("X", 2, 2));
-// console.log(Gameboard.displayWinner());
+        gameboardArr = [
+            [null, null, null],
+            [null, null, null],
+            [null, null, null] 
+        ];
+    }
+
+    return { addPlayer, getPlayer1, getPlayer2, placeShape, displayWinner, displayBoard, resetGame };
+}
