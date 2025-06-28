@@ -1,5 +1,27 @@
-// Gameboard is an IIFE
-const Gameboard = (function() {
+const Gameboard = createGameboard();
+
+const player1 = document.querySelector("#player1");
+const player2 = document.querySelector("#player2");
+const startBtn = document.querySelector("#start");
+const resetBtn = document.querySelector("#reset");
+let msg = document.querySelector(".msg");
+
+startBtn.addEventListener("click", () => {
+    Gameboard.addPlayer(player1.value, "X");
+    Gameboard.addPlayer(player2.value, "O");
+});
+
+const cell1 = document.querySelector(".one");
+const cell2 = document.querySelector(".two");
+const cell3 = document.querySelector(".three");
+document.querySelector(".top-row").addEventListener("click", (e) => {
+    if (e.target === cell1) {
+        cell1.textContent = Gameboard.getPlayer1.shape;
+    }
+});
+
+// converted to function to be accessible from anywhere
+function createGameboard() {
     let playerArr = [];
 
     // 3x3 gameboard to place shapes on
@@ -33,9 +55,17 @@ const Gameboard = (function() {
         return Player(name, shape);
     }
 
-    function showPlayers() {
-        return playerArr.map(player => `${player.playerName}: ${player.shape}`);
+    function getPlayer1() {
+        return playerArr[0];
     }
+    
+    function getPlayer2() {
+        return playerArr[1];
+    }
+
+    // function showPlayers() {
+    //     return playerArr.map(player => `${player.playerName}: ${player.shape}`);
+    // }
 
     function placeShape(shape, row, col) {
         const shapeU = shape.toUpperCase();
@@ -141,19 +171,19 @@ const Gameboard = (function() {
             .join("\n");
     }
 
-    return { addPlayer, showPlayers, placeShape, displayWinner, displayBoard, };
-})();
+    return { addPlayer, getPlayer1, getPlayer2, placeShape, displayWinner, displayBoard, };
+}
 
-console.log(Gameboard.displayBoard());
-Gameboard.addPlayer("bob", "x");
-Gameboard.addPlayer("joe", "o");
-console.log(Gameboard.placeShape("O", 0, 0));
-console.log(Gameboard.placeShape("O", 0, 1));
-console.log(Gameboard.placeShape("X", 0, 2));
-console.log(Gameboard.placeShape("O", 1, 0));
-console.log(Gameboard.placeShape("X", 1, 1));
-console.log(Gameboard.placeShape("O", 1, 2));
-console.log(Gameboard.placeShape("X", 2, 0));
-console.log(Gameboard.placeShape("O", 2, 1));
-console.log(Gameboard.placeShape("X", 2, 2));
-console.log(Gameboard.displayWinner());
+// console.log(Gameboard.displayBoard());
+// Gameboard.addPlayer("bob", "x");
+// Gameboard.addPlayer("joe", "o");
+// console.log(Gameboard.placeShape("O", 0, 0));
+// console.log(Gameboard.placeShape("O", 0, 1));
+// console.log(Gameboard.placeShape("X", 0, 2));
+// console.log(Gameboard.placeShape("O", 1, 0));
+// console.log(Gameboard.placeShape("X", 1, 1));
+// console.log(Gameboard.placeShape("O", 1, 2));
+// console.log(Gameboard.placeShape("X", 2, 0));
+// console.log(Gameboard.placeShape("O", 2, 1));
+// console.log(Gameboard.placeShape("X", 2, 2));
+// console.log(Gameboard.displayWinner());
